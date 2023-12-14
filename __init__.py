@@ -15,6 +15,22 @@ bl_info = {
 # give Python access to Blender's functionality
 import bpy
 
+def add_pipe_obj(size):
+    """Create a new pipe mesh object"""
+    bpy.ops.mesh.primitive_cylinder_add(size)
+
+class MESH_OT_add_pipe(bpy.types.Operator):
+    """Create a new monkey mesh object with a subdivision surf modifier and shaded smooth"""
+
+    bl_idname = "mesh.add_pipe_obj"
+    bl_label = "Add Pipe"
+    bl_options = {"REGISTER", "UNDO"}
+    
+    def execute(self, context):
+
+        add_pipe_obj(self.mesh_size)
+
+        return {"FINISHED"}
 
 def add_subdiv_monkey_obj(size, subdiv_viewport_levels, subdiv_render_levels, shade_smooth):
     bpy.ops.mesh.primitive_monkey_add(size=size)
@@ -98,11 +114,13 @@ class VIEW3D_PT_simple_addon(bpy.types.Panel):  # class naming convention ‘CAT
 def register():
     bpy.utils.register_class(VIEW3D_PT_simple_addon)
     bpy.utils.register_class(MESH_OT_add_subdiv_monkey)
+    bpy.utils.register_class(MESH_OT_add_pipe)
 
 
 def unregister():
     bpy.utils.unregister_class(VIEW3D_PT_simple_addon)
     bpy.utils.unregister_class(MESH_OT_add_subdiv_monkey)
+    bpy.utils.unregister_class(MESH_OT_add_pipe)
 
 
 if __name__ == "__main__":
